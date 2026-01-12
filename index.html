@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>S.C.S. Fragment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #0a0a0a;
+  --panel: #111;
+  --text: #cfcfcf;
+  --muted: #7a7a7a;
+  --accent: #8f8f8f;
+  --danger: #b14a4a;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Courier New", monospace;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #050505;
+  border-bottom: 1px solid #1c1c1c;
+}
+
+.menu-btn {
+  font-size: 24px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.title {
+  margin-left: 16px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+/* SIDE MENU */
+nav {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  background: var(--panel);
+  border-right: 1px solid #1c1c1c;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 10;
+}
+
+nav.open {
+  left: 0;
+}
+
+nav h3 {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+nav button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+nav button:hover {
+  color: var(--accent);
+}
+
+/* MAIN */
+main {
+  padding: 30px 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+/* FORM */
+input, button.submit {
+  width: 100%;
+  background: #0d0d0d;
+  border: 1px solid #1f1f1f;
+  color: var(--text);
+  padding: 10px;
+  margin-top: 10px;
+}
+
+button.submit {
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+button.submit:hover {
+  border-color: var(--accent);
+}
+
+.status {
+  margin-top: 15px;
+  font-size: 13px;
+  color: var(--muted);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <div class="title">S.C.S. FRAGMENT</div>
+</header>
+
+<nav id="menu">
+  <h3>РАЗДЕЛЫ</h3>
+  <button onclick="showSection('about')">Про нас</button>
+  <button onclick="showSection('info')">Информация</button>
+  <button onclick="showSection('archives')">Архивы</button>
+  <button onclick="showSection('ufs')">У.Ф.С.</button>
+  <button onclick="showSection('docs')">Документарий</button>
+</nav>
+
+<main>
+
+<section id="about" class="section active">
+<h1>Про нас</h1>
+<p>
+S.C.S. Fragment — закрытая коммуникационная структура,  
+занимающаяся хранением, обработкой и фрагментацией информации.  
+Мы не предлагаем безопасность.  
+Мы предлагаем доступ.
+</p>
+</section>
+
+<section id="info" class="section">
+<h1>Информация</h1>
+<p>
+Часть материалов может быть повреждена или фрагментирована.  
+Некоторые данные становятся доступны только после завершения процессов.
+</p>
+</section>
+
+<section id="archives" class="section">
+<h1>Архивы</h1>
+
+<p>
+Доступ к архивным фрагментам
+осуществляется по индивидуальным кодам.
+</p>
+
+<p style="color:#7a7a7a;">
+Часть архивов зашифрована.<br>
+Некорректный ввод фиксируется.
+</p>
+
+<hr>
+
+<input id="archiveInput" placeholder="Введите код архива">
+<button class="submit" onclick="activateArchive()">Активировать</button>
+
+<div class="status" id="archiveStatus">Ожидание ввода…</div>
+
+<pre id="archiveOutput" style="margin-top:15px;color:#8f8f8f;"></pre>
+
+</section>
+
+<section id="ufs" class="section">
+<h1>У.Ф.С.</h1>
+
+<p><b>Эксперимент С6-2</b></p>
+<p>У.Ф.С. — Универсальная Фрагментационная Система.</p>
+
+<p>
+Модуль расшифровки предназначен для восстановления
+исходных структур из фрагментированных данных.
+</p>
+
+<hr>
+
+<p><b>Расшифровка фрагмента</b></p>
+
+<input id="ufsInput" placeholder="Введите зашифрованную последовательность">
+<button class="submit" onclick="decodeUFS()">Запустить расшифровку</button>
+
+<div class="status" id="ufsStatus">Ожидание данных…</div>
+
+<pre id="ufsOutput" style="margin-top:15px;color:#8f8f8f;"></pre>
+
+<hr>
+
+<p style="color:#7a7a7a;font-size:12px;">
+Некоторые данные могут быть восстановлены частично.<br>
+Полная интерпретация требует контекста.
+</p>
+</section>
+
+
+<section id="docs" class="section">
+<h1>Документарий</h1>
+<p>
+Некоторые документы требуют подтверждения участия.  
+Ожидание ответа сервера обязательно.
+</p>
+
+<input placeholder="Идентификатор субъекта">
+<button class="submit" onclick="fakeRequest()">Отправить запрос</button>
+<div class="status" id="status">Ожидание...</div>
+</section>
+
+</main>
+
+<script>
+function activateArchive() {
+  const input = document.getElementById("archiveInput").value.trim().toUpperCase();
+  const status = document.getElementById("archiveStatus");
+  const output = document.getElementById("archiveOutput");
+
+  output.textContent = "";
+
+  if (!input) {
+    status.textContent = "Ошибка: код не введён.";
+    return;
+  }
+
+  // БАЗА ИЗВЕСТНЫХ КОДОВ
+  const knownCodes = {
+    "31517А": {
+      record: "Запись 002",
+      word: "ФРАГМЕНТ",
+      guaranteedDigit: 4
+    },
+    "73952J": {
+      record: "Запись 004",
+      word: "ПРОТОКОЛ",
+      guaranteedDigit: 8
+    }
+  };
+
+  // генерация индивидуального 5-значного кода
+  function generatePersonalCode(guaranteedDigit) {
+    let code = [];
+
+    for (let i = 0; i < 5; i++) {
+      code.push(Math.floor(Math.random() * 10));
+    }
+
+    // 4-й символ гарантирован
+    code[3] = guaranteedDigit;
+
+    return code.join("");
+  }
+
+  if (knownCodes[input]) {
+    const archive = knownCodes[input];
+    const personalCode = generatePersonalCode(archive.guaranteedDigit);
+
+    status.textContent = "Код архива успешно активирован.";
+    output.textContent =
+      "Доступ подтверждён.\n\n" +
+      "Связанный фрагмент: " + archive.record + "\n" +
+      "Ключевое слово: " + archive.word + "\n\n" +
+      "Отправьте фотографию этого индивидуального кода\n" +
+      "тому, от кого вы получили доступ к сайту.\n\n" +
+      "Ваш индивидуальный код:\n" +
+      personalCode;
+
+  } else {
+    // неизвестный код → ложный идентификатор
+    const randomGuaranteedDigit = Math.floor(Math.random() * 10);
+    const fakeCode = generatePersonalCode(randomGuaranteedDigit);
+
+    status.textContent = "Архив не найден.";
+    output.textContent =
+      "Код не распознан.\n\n" +
+      "Система сгенерировала временный идентификатор:\n" +
+      fakeCode + "\n\n" +
+      "Контекст отсутствует.";
+  }
+}
+
+
+function toggleMenu() {
+  document.getElementById('menu').classList.toggle('open');
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('menu').classList.remove('open');
+}
+
+function fakeRequest() {
+  const status = document.getElementById('status');
+  status.textContent = "Запрос отправлен. Ожидание ответа сервера...";
+  setTimeout(() => {
+    status.textContent = "Ответ не получен. Повторите попытку позже.";
+  }, 4000);
+}
+
+
+const alphabet = [
+"А","Б","В","Г","Д","Е","Ж","З","И","Й","К","Л","М","Н","О","П",
+"Р","С","Т","У","Ф","Х","Ц","Ч","Ш","Щ","Ъ","Ы","Ь","Э","Ю","Я"
+];
+
+function decodeUFS() {
+  const input = document.getElementById("ufsInput").value.toUpperCase().trim();
+  const status = document.getElementById("ufsStatus");
+  const output = document.getElementById("ufsOutput");
+
+  if (!input) {
+    status.textContent = "Ошибка: данные отсутствуют.";
+    output.textContent = "";
+    return;
+  }
+
+  const len = input.length;
+  const base = alphabet.length + 1; // 33
+  let result = [];
+
+  for (let char of input) {
+
+    // БУКВЫ
+    if (alphabet.includes(char)) {
+      let encoded = alphabet.indexOf(char) + 1;
+
+      let a = Math.max(encoded, len);
+      let b = Math.min(encoded, len);
+
+      let restored = a + b; // восстановление исходного большего
+
+      if (restored <= alphabet.length) {
+        result.push(alphabet[restored - 1]);
+      } else {
+        result.push("?");
+      }
+    }
+
+    // ЦИФРЫ
+    else if (!isNaN(char)) {
+      let num = parseInt(char);
+
+      let a = Math.max(num, base);
+      let b = Math.min(num, base);
+
+      let restored = a - b;
+      result.push(restored.toString());
+    }
+
+    // ПРОЧЕЕ
+    else {
+      result.push("?");
+    }
+  }
+
+  status.textContent = "Расшифровка завершена.";
+  output.textContent =
+    "Фрагмент: " + input +
+    "\nДлина: " + len +
+    "\nРезультат: " + result.join("");
+}
+
+
+</script>
+
+</body>
+</html>
