@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>S.C.S. Fragment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #0a0a0a;
+  --panel: #111;
+  --text: #cfcfcf;
+  --muted: #7a7a7a;
+  --accent: #8f8f8f;
+  --danger: #b14a4a;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Courier New", monospace;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #050505;
+  border-bottom: 1px solid #1c1c1c;
+}
+
+.menu-btn {
+  font-size: 24px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.title {
+  margin-left: 16px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+/* SIDE MENU */
+nav {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  background: var(--panel);
+  border-right: 1px solid #1c1c1c;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 10;
+}
+
+nav.open {
+  left: 0;
+}
+
+nav h3 {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+nav button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+nav button:hover {
+  color: var(--accent);
+}
+
+/* MAIN */
+main {
+  padding: 30px 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+/* FORM */
+input, button.submit {
+  width: 100%;
+  background: #0d0d0d;
+  border: 1px solid #1f1f1f;
+  color: var(--text);
+  padding: 10px;
+  margin-top: 10px;
+}
+
+button.submit {
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+button.submit:hover {
+  border-color: var(--accent);
+}
+
+.status {
+  margin-top: 15px;
+  font-size: 13px;
+  color: var(--muted);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <div class="title">S.C.S. FRAGMENT</div>
+</header>
+
+<nav id="menu">
+  <h3>РАЗДЕЛЫ</h3>
+  <button onclick="showSection('about')">Про нас</button>
+  <button onclick="showSection('info')">Информация</button>
+  <button onclick="showSection('archives')">Архивы</button>
+  <button onclick="showSection('ufs')">У.Ф.С.</button>
+  <button onclick="showSection('docs')">Документарий</button>
+</nav>
+
+<main>
+
+<section id="about" class="section active">
+<h1>Про нас</h1>
+<p>
+S.C.S. Fragment — закрытая коммуникационная структура,  
+занимающаяся хранением, обработкой и фрагментацией информации.  
+Мы не предлагаем безопасность.  
+Мы предлагаем доступ.
+</p>
+</section>
+
+<section id="info" class="section">
+<h1>Информация</h1>
+<p>
+Часть материалов может быть повреждена или фрагментирована.  
+Некоторые данные становятся доступны только после завершения процессов.
+</p>
+</section>
+
+<section id="archives" class="section">
+<h1>Архивы</h1>
+<p>
+Архивные данные распределены по уровням доступа.  
+При отсутствии допуска — отображаются только структурные следы.
+</p>
+</section>
+
+<section id="ufs" class="section">
+<h1>У.Ф.С.</h1>
+<p><b>Эксперимент С6-2</b></p>
+
+<p>
+У.Ф.С. — Универсальная Фрагментационная Система.
+</p>
+
+<p><b>Принцип работы:</b><br>
+Количество символов в слове вычитается из порядкового номера каждого символа.
+</p>
+
+<p>
+Русский алфавит — 32 символа.
+</p>
+
+<p>
+Пример: СЛОВО (5 символов)
+</p>
+
+<p>
+С = 19 − 5 = 14 → М<br>
+Л = 13 − 5 = 8 → Ж<br>
+О = 16 − 5 = 11 → Й<br>
+В = 3 − 5 = −2 → Б<br>
+О = 16 − 5 = 11 → Й
+</p>
+
+<p><b>Цифровая составляющая:</b><br>
+Числовые значения учитываются после последнего символа алфавита.
+</p>
+
+<p>
+К 32 добавляется 1 — как маркер числовых расчётов.
+</p>
+
+<p>
+С-6 метод используется для логического представления системы.
+</p>
+</section>
+
+<section id="docs" class="section">
+<h1>Документарий</h1>
+<p>
+Некоторые документы требуют подтверждения участия.  
+Ожидание ответа сервера обязательно.
+</p>
+
+<input placeholder="Идентификатор субъекта">
+<button class="submit" onclick="fakeRequest()">Отправить запрос</button>
+<div class="status" id="status">Ожидание...</div>
+</section>
+
+</main>
+
+<script>
+  
+function toggleMenu() {
+  document.getElementById('menu').classList.toggle('open');
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('menu').classList.remove('open');
+}
+
+function fakeRequest() {
+  const status = document.getElementById('status');
+  status.textContent = "Запрос отправлен. Ожидание ответа сервера...";
+  setTimeout(() => {
+    status.textContent = "Ответ не получен. Повторите попытку позже.";
+  }, 4000);
+}
+  const alphabet = [
+  "А","Б","В","Г","Д","Е","Ж","З","И","Й","К","Л","М","Н","О","П",
+  "Р","С","Т","У","Ф","Х","Ц","Ч","Ш","Щ","Ъ","Ы","Ь","Э","Ю","Я"
+];
+
+function runUFS() {
+  const input = document.getElementById("ufsInput").value.toUpperCase().trim();
+  const status = document.getElementById("ufsStatus");
+  const output = document.getElementById("ufsOutput");
+
+  if (!input) {
+    status.textContent = "Ошибка: входные данные отсутствуют.";
+    output.textContent = "";
+    return;
+  }
+
+  let result = [];
+  let len = input.length;
+
+  for (let char of input) {
+    // БУКВЫ
+    if (alphabet.includes(char)) {
+      let index = alphabet.indexOf(char) + 1;
+      let newIndex = index - len;
+      while (newIndex <= 0) newIndex += alphabet.length;
+      result.push(alphabet[newIndex - 1]);
+    }
+
+    // ЦИФРЫ
+    else if (!isNaN(char)) {
+      let num = parseInt(char);
+      let value = (alphabet.length + 1) + (num + 1);
+      result.push((value % 10).toString());
+    }
+
+    // ПРОЧЕЕ
+    else {
+      result.push("?");
+    }
+  }
+
+  status.textContent = "Фрагментация завершена.";
+  output.textContent =
+    "Вход: " + input +
+    "\nДлина фрагмента: " + len +
+    "\nРезультат: " + result.join("");
+}
+
+</script>
+
+</body>
+</html>
