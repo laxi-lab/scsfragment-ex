@@ -1,4 +1,87 @@
-// === Меню и навигация ===
+  let ufsUnlocked = false;
+
+function unlockUFS() {
+  const key = document.getElementById("ufsKey").value.trim();
+  const status = document.getElementById("ufsAccessStatus");
+  const panel = document.getElementById("ufsExtended");
+
+  if (key === "SCS-UFS-ACCESS") {
+    ufsUnlocked = true;
+    panel.style.display = "block";
+    status.textContent = "Доступ УФС подтверждён.";
+  } else {
+    status.textContent = "Неверный код доступа.";
+  }
+}
+function activateArchive() {
+  const input = document.getElementById("archiveInput").value.trim().toUpperCase();
+  const status = document.getElementById("archiveStatus");
+  const output = document.getElementById("archiveOutput");
+
+  output.textContent = "";
+
+  if (!input) {
+    status.textContent = "Ошибка: код не введён.";
+    return;
+  }
+
+  // БАЗА ИЗВЕСТНЫХ КОДОВ
+  const knownCodes = {
+    "31517А": {
+      record: "Запись 002",
+      word: "ФРАГМЕНТ",
+      guaranteedDigit: 4
+    },
+    "73952J": {
+      record: "Запись 004",
+      word: "ПРОТОКОЛ",
+      guaranteedDigit: 8
+    }
+  };
+
+  // генерация индивидуального 5-значного кода
+  function generatePersonalCode(guaranteedDigit) {
+    let code = [];
+
+    for (let i = 0; i < 5; i++) {
+      code.push(Math.floor(Math.random() * 10));
+    }
+
+    // 4-й символ гарантирован
+    code[3] = guaranteedDigit;
+
+    return code.join("");
+  }
+
+  if (knownCodes[input]) {
+    const archive = knownCodes[input];
+    const personalCode = generatePersonalCode(archive.guaranteedDigit);
+
+    status.textContent = "Код архива успешно активирован.";
+    output.textContent =
+      "Доступ подтверждён.\n\n" +
+      "Связанный фрагмент: " + archive.record + "\n" +
+      "Ключевое слово: " + archive.word + "\n\n" +
+      "Отправьте фотографию этого индивидуального кода\n" +
+      "тому, от кого вы получили доступ к сайту.\n\n" +
+      "Ваш индивидуальный код:\n" +
+      personalCode;
+
+  } else {
+    // неизвестный код → ложный идентификатор
+    const randomGuaranteedDigit = Math.floor(Math.random() * 10);
+    const fakeCode = generatePersonalCode(randomGuaranteedDigit);
+
+    status.textContent = "Архив не найден.";
+    output.textContent =
+      "Код не распознан.\n\n" +
+      "Система сгенерировала временный идентификатор:\n" +
+      fakeCode + "\n\n" +
+      "Контекст отсутствует.";
+  }
+}
+
+
 function toggleMenu() {
   document.getElementById('menu').classList.toggle('open');
 }
@@ -9,7 +92,6 @@ function showSection(id) {
   document.getElementById('menu').classList.remove('open');
 }
 
-// === Фейковые запросы ===
 function fakeRequest() {
   const status = document.getElementById('status');
   status.textContent = "Запрос отправлен. Ожидание ответа сервера...";
@@ -18,10 +100,10 @@ function fakeRequest() {
   }, 4000);
 }
 
-// === Декодирование У.Ф.С. ===
+
 const alphabet = [
-  "А","Б","В","Г","Д","Е","Ж","З","И","Й","К","Л","М","Н","О","П",
-  "Р","С","Т","У","Ф","Х","Ц","Ч","Ш","Щ","Ъ","Ы","Ь","Э","Ю","Я"
+"А","Б","В","Г","Д","Е","Ж","З","И","Й","К","Л","М","Н","О","П",
+"Р","С","Т","У","Ф","Х","Ц","Ч","Ш","Щ","Ъ","Ы","Ь","Э","Ю","Я"
 ];
 
 function decodeUFS() {
@@ -40,74 +122,54 @@ function decodeUFS() {
   let result = [];
 
   for (let char of input) {
+
+    // БУКВЫ
     if (alphabet.includes(char)) {
       let encoded = alphabet.indexOf(char) + 1;
+
       let a = Math.max(encoded, len);
       let b = Math.min(encoded, len);
-      let restored = a + b;
-      result.push(restored <= alphabet.length ? alphabet[restored - 1] : "?");
-    } else if (!isNaN(char)) {
+
+      let restored = a + b; // восстановление исходного большего
+
+      if (restored <= alphabet.length) {
+        result.push(alphabet[restored - 1]);
+      } else {
+        result.push("?");
+      }
+    }
+
+    // ЦИФРЫ
+    else if (!isNaN(char)) {
       let num = parseInt(char);
+
       let a = Math.max(num, base);
       let b = Math.min(num, base);
-      result.push((a - b).toString());
-    } else {
+
+      let restored = a - b;
+      result.push(restored.toString());
+    }
+
+    // ПРОЧЕЕ
+    else {
       result.push("?");
     }
   }
 
   status.textContent = "Расшифровка завершена.";
-  output.textContent = "Фрагмент: " + input + "\nДлина: " + len + "\nРезультат: " + result.join("");
+  output.textContent =
+    "Фрагмент: " + input +
+    "\nДлина: " + len +
+    "\nРезультат: " + result.join("");
 }
 
 
 
 
-// === Архивы ===
-function activateArchive() {
-  const input = document.getElementById("archiveInput").value.trim().toUpperCase();
-  const status = document.getElementById("archiveStatus");
-  const output = document.getElementById("archiveOutput");
 
-  output.textContent = "";
-  if (!input) {
-    status.textContent = "Ошибка: код не введён.";
-    return;
-  }
 
-  const knownCodes = {
-    "31517А": { record: "Запись 002", word: "ФРАГМЕНТ", guaranteedDigit: 4 },
-    "73952J": { record: "Запись 004", word: "ПРОТОКОЛ", guaranteedDigit: 8 }
-  };
 
-  function generatePersonalCode(guaranteedDigit) {
-    let code = [];
-    for (let i = 0; i < 5; i++) code.push(Math.floor(Math.random() * 10));
-    code[3] = guaranteedDigit;
-    return code.join("");
-  }
-
-  if (knownCodes[input]) {
-    const archive = knownCodes[input];
-    const personalCode = generatePersonalCode(archive.guaranteedDigit);
-    status.textContent = "Код архива успешно активирован.";
-    output.textContent =
-      "Доступ подтверждён.\n\n" +
-      "Связанный фрагмент: " + archive.record + "\n" +
-      "Ключевое слово: " + archive.word + "\n\n" +
-      "Отправьте фотографию этого индивидуального кода\n" +
-      "тому, от кого вы получили доступ к сайту.\n\n" +
-      "Ваш индивидуальный код:\n" + personalCode;
-  } else {
-    const fakeCode = generatePersonalCode(Math.floor(Math.random() * 10));
-    status.textContent = "Архив не найден.";
-    output.textContent =
-      "Код не распознан.\n\nСистема сгенерировала временный идентификатор:\n" +
-      fakeCode + "\n\nКонтекст отсутствует.";
-  }
-}
-
-function runUFS() {
+  function runUFS() {
   const input = document.getElementById("ufsInput").value.toUpperCase().trim();
   const status = document.getElementById("ufsStatus");
   const output = document.getElementById("ufsOutput");
@@ -150,7 +212,11 @@ function runUFS() {
     "\nРезультат: " + result.join("");
 }
 
-function checkRoom() {
+
+
+
+
+  function checkRoom() {
   const input = document.getElementById("roomInput").value.trim().toUpperCase();
   const status = document.getElementById("roomStatus");
   const output = document.getElementById("roomOutput");
@@ -228,20 +294,3 @@ const rooms = {
       "ЙЬЫЗИДНЮИТ ЖЯМИЮХ БЪУВМХ";
   }
 }
-
-let ufsUnlocked = false;
-
-function unlockUFS() {
-  const key = document.getElementById("ufsKey").value.trim();
-  const status = document.getElementById("ufsAccessStatus");
-  const panel = document.getElementById("ufsExtended");
-
-  if (key === "SCS-UFS-ACCESS") {
-    ufsUnlocked = true;
-    panel.style.display = "block";
-    status.textContent = "Доступ УФС подтверждён.";
-  } else {
-    status.textContent = "Неверный код доступа.";
-  }
-}
-
