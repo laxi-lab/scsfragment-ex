@@ -60,6 +60,9 @@ function decodeUFS() {
   output.textContent = "Фрагмент: " + input + "\nДлина: " + len + "\nРезультат: " + result.join("");
 }
 
+
+
+
 // === Архивы ===
 function activateArchive() {
   const input = document.getElementById("archiveInput").value.trim().toUpperCase();
@@ -103,3 +106,142 @@ function activateArchive() {
       fakeCode + "\n\nКонтекст отсутствует.";
   }
 }
+
+function runUFS() {
+  const input = document.getElementById("ufsInput").value.toUpperCase().trim();
+  const status = document.getElementById("ufsStatus");
+  const output = document.getElementById("ufsOutput");
+
+  if (!input) {
+    status.textContent = "Ошибка: входные данные отсутствуют.";
+    output.textContent = "";
+    return;
+  }
+
+  let result = [];
+  let len = input.length;
+
+  for (let char of input) {
+    // БУКВЫ
+    if (alphabet.includes(char)) {
+      let index = alphabet.indexOf(char) + 1;
+      let newIndex = index - len;
+      while (newIndex <= 0) newIndex += alphabet.length;
+      result.push(alphabet[newIndex - 1]);
+    }
+
+    // ЦИФРЫ
+    else if (!isNaN(char)) {
+      let num = parseInt(char);
+      let value = (alphabet.length + 1) + (num + 1);
+      result.push((value % 10).toString());
+    }
+
+    // ПРОЧЕЕ
+    else {
+      result.push("?");
+    }
+  }
+
+  status.textContent = "Фрагментация завершена.";
+  output.textContent =
+    "Вход: " + input +
+    "\nДлина фрагмента: " + len +
+    "\nРезультат: " + result.join("");
+}
+
+function checkRoom() {
+  const input = document.getElementById("roomInput").value.trim().toUpperCase();
+  const status = document.getElementById("roomStatus");
+  const output = document.getElementById("roomOutput");
+
+  output.textContent = "";
+  status.textContent = "";
+
+  if (!input) {
+    status.textContent = "Ошибка: код не введён.";
+    return;
+  }
+
+  // БАЗА ПОМЕЩЕНИЙ
+const rooms = {
+  "61656K": {
+    name: "Рабочая комната",
+    note: "Успешная организация процессов",
+    description: "Личное пространство сотрудника. Используется для хранения заметок и ведения закрытых записей.",
+    date: "02.07.2025",
+    time: "03:51 AM"
+  },
+
+  "31567C": {
+    name: "Восковое хранилище",
+    note: "Доступ ограничен",
+    description: "Секция экспериментальных образцов. Содержимое не подлежит публичной классификации.",
+    date: "14.06.2025",
+    time: "01:18 AM",
+    cipher: true
+  },
+
+  "71781C": {
+    name: "Кафетерий",
+    note: "Функционирует в штатном режиме",
+    description: "Зона отдыха персонала. Используется для неформальных контактов.",
+    date: "28.06.2025",
+    time: "12:04 PM"
+  },
+    "99181D": {
+      name: "Бункерная библиотека",
+      note: "Архивы сохранены",
+      date: "09.05.2025",
+      time: "11:42 PM"
+    }
+  };
+
+  if (!rooms[input]) {
+    status.textContent = "Помещение не найдено.";
+    output.textContent =
+      "Запрос отклонён.\n\n" +
+      "Проверьте корректность кода.";
+    return;
+  }
+
+  const room = rooms[input];
+
+  status.textContent = "Доступ подтверждён.";
+  output.textContent =
+    "Помещение: " + room.name + "\n" +
+    "Статус: " + room.note + "\n" +
+"Описание: " + room.description + "\n" +
+    "Дата проверки: " + room.date + "\n" +
+    "Время: " + room.time;
+
+  // ДОПОЛНИТЕЛЬНЫЙ ШИФР ДЛЯ ВОСКОВОГО ХРАНИЛИЩА
+  if (room.cipher) {
+    output.textContent +=
+      "\n\n---\n\n" +
+      "ЦАБАЭЯЪДЧЭОЯТС МАВЙШОАЧ\n\n" +
+      "ЖДГЖГЦВГЖЗС ИЕЮЫЧЩЧЙУ\n" +
+      "МИСЗХЯ ЕЙКГГ ЖЩЯАД\n" +
+      "ЫФОЗЭБЛ ЕЮ ИЙЮЭЮДФ\n" +
+      "ВГЕБХАСВГШГ ШДЗЕЖЮХИЮХ ЖЩЯАД\n\n" +
+      "ГШЭБЯШАЧЖШЕДТ\n" +
+      "ЙЬЫЗИДНЮИТ ЖЯМИЮХ БЪУВМХ";
+  }
+}
+
+let ufsUnlocked = false;
+
+function unlockUFS() {
+  const key = document.getElementById("ufsKey").value.trim();
+  const status = document.getElementById("ufsAccessStatus");
+  const panel = document.getElementById("ufsExtended");
+
+  if (key === "SCS-UFS-ACCESS") {
+    ufsUnlocked = true;
+    panel.style.display = "block";
+    status.textContent = "Доступ УФС подтверждён.";
+  } else {
+    status.textContent = "Неверный код доступа.";
+  }
+}
+
