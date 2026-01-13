@@ -157,6 +157,7 @@ button.submit:hover {
   <button onclick="showSection('archives')">Архивы</button>
   <button onclick="showSection('ufs')">У.Ф.С.</button>
   <button onclick="showSection('docs')">Документарий</button>
+  <button onclick="showSection('workspace')">Рабочее пространство</button>
 </nav>
 
 <main>
@@ -231,6 +232,32 @@ S.C.S. Fragment — закрытая коммуникационная струк
 Некоторые данные могут быть восстановлены частично.<br>
 Полная интерпретация требует контекста.
 </p>
+  <hr>
+
+<h3>Расширенный доступ УФС</h3>
+
+<p style="color:#7a7a7a;">
+  Некоторые функции системы
+  доступны только при наличии
+  внутреннего допуска.
+</p>
+
+<input id="ufsKey" placeholder="Секретный код доступа">
+<button class="submit" onclick="unlockUFS()">Подтвердить</button>
+
+<div id="ufsAccessStatus" class="status"></div>
+
+<div id="ufsExtended" style="display:none; margin-top:20px;">
+
+  <h3>Шифровка</h3>
+<p style="color:#7a7a7a;">
+  Ввод расположен в методе расшифровки.
+</p>
+  <button class="submit" onclick="runUFS()">Зашифровать</button>
+
+  <pre id="ufsOutput"></pre>
+
+</div>
 </section>
 
 
@@ -245,10 +272,62 @@ S.C.S. Fragment — закрытая коммуникационная струк
 <button class="submit" onclick="fakeRequest()">Отправить запрос</button>
 <div class="status" id="status">Ожидание...</div>
 </section>
+<section id="workspace" class="section">
+  <h1>Личное место работы</h1>
+
+  <p>
+    Раздел предназначен для проверки
+    внутренних помещений комплекса.
+    <br>
+    Доступ осуществляется исключительно
+    по коду комнаты.
+  </p>
+
+  <p style="color:#7a7a7a;">
+    Все обращения фиксируются
+    в системе безопасности.
+  </p>
+
+  <hr>
+
+  <input id="roomInput" placeholder="Введите код помещения">
+  <button class="submit" onclick="checkRoom()">Проверить</button>
+
+  <div class="status" id="roomStatus">Ожидание ввода…</div>
+
+  <pre id="roomOutput" style="margin-top:15px;color:#8f8f8f;"></pre>
+</section>
 
 </main>
 
+
+
+
+
+
+
+
+
+
+
+
+  
 <script>
+  let ufsUnlocked = false;
+
+function unlockUFS() {
+  const key = document.getElementById("ufsKey").value.trim();
+  const status = document.getElementById("ufsAccessStatus");
+  const panel = document.getElementById("ufsExtended");
+
+  if (key === "SCS-UFS-ACCESS") {
+    ufsUnlocked = true;
+    panel.style.display = "block";
+    status.textContent = "Доступ УФС подтверждён.";
+  } else {
+    status.textContent = "Неверный код доступа.";
+  }
+}
 function activateArchive() {
   const input = document.getElementById("archiveInput").value.trim().toUpperCase();
   const status = document.getElementById("archiveStatus");
@@ -400,7 +479,138 @@ function decodeUFS() {
 }
 
 
+
+
+
+
+
+  function runUFS() {
+  const input = document.getElementById("ufsInput").value.toUpperCase().trim();
+  const status = document.getElementById("ufsStatus");
+  const output = document.getElementById("ufsOutput");
+
+  if (!input) {
+    status.textContent = "Ошибка: входные данные отсутствуют.";
+    output.textContent = "";
+    return;
+  }
+
+  let result = [];
+  let len = input.length;
+
+  for (let char of input) {
+    // БУКВЫ
+    if (alphabet.includes(char)) {
+      let index = alphabet.indexOf(char) + 1;
+      let newIndex = index - len;
+      while (newIndex <= 0) newIndex += alphabet.length;
+      result.push(alphabet[newIndex - 1]);
+    }
+
+    // ЦИФРЫ
+    else if (!isNaN(char)) {
+      let num = parseInt(char);
+      let value = (alphabet.length + 1) + (num + 1);
+      result.push((value % 10).toString());
+    }
+
+    // ПРОЧЕЕ
+    else {
+      result.push("?");
+    }
+  }
+
+  status.textContent = "Фрагментация завершена.";
+  output.textContent =
+    "Вход: " + input +
+    "\nДлина фрагмента: " + len +
+    "\nРезультат: " + result.join("");
+}
+
+
+
+
+
+  function checkRoom() {
+  const input = document.getElementById("roomInput").value.trim().toUpperCase();
+  const status = document.getElementById("roomStatus");
+  const output = document.getElementById("roomOutput");
+
+  output.textContent = "";
+  status.textContent = "";
+
+  if (!input) {
+    status.textContent = "Ошибка: код не введён.";
+    return;
+  }
+
+  // БАЗА ПОМЕЩЕНИЙ
+const rooms = {
+  "61656K": {
+    name: "Рабочая комната",
+    note: "Успешная организация процессов",
+    description: "Личное пространство сотрудника. Используется для хранения заметок и ведения закрытых записей.",
+    date: "02.07.2025",
+    time: "03:51 AM"
+  },
+
+  "31567C": {
+    name: "Восковое хранилище",
+    note: "Доступ ограничен",
+    description: "Секция экспериментальных образцов. Содержимое не подлежит публичной классификации.",
+    date: "14.06.2025",
+    time: "01:18 AM",
+    cipher: true
+  },
+
+  "71781C": {
+    name: "Кафетерий",
+    note: "Функционирует в штатном режиме",
+    description: "Зона отдыха персонала. Используется для неформальных контактов.",
+    date: "28.06.2025",
+    time: "12:04 PM"
+  },
+    "99181D": {
+      name: "Бункерная библиотека",
+      note: "Архивы сохранены",
+      date: "09.05.2025",
+      time: "11:42 PM"
+    }
+  };
+
+  if (!rooms[input]) {
+    status.textContent = "Помещение не найдено.";
+    output.textContent =
+      "Запрос отклонён.\n\n" +
+      "Проверьте корректность кода.";
+    return;
+  }
+
+  const room = rooms[input];
+
+  status.textContent = "Доступ подтверждён.";
+  output.textContent =
+    "Помещение: " + room.name + "\n" +
+    "Статус: " + room.note + "\n" +
+"Описание: " + room.description + "\n" +
+    "Дата проверки: " + room.date + "\n" +
+    "Время: " + room.time;
+
+  // ДОПОЛНИТЕЛЬНЫЙ ШИФР ДЛЯ ВОСКОВОГО ХРАНИЛИЩА
+  if (room.cipher) {
+    output.textContent +=
+      "\n\n---\n\n" +
+      "ЦАБАЭЯЪДЧЭОЯТС МАВЙШОАЧ\n\n" +
+      "ЖДГЖГЦВГЖЗС ИЕЮЫЧЩЧЙУ\n" +
+      "МИСЗХЯ ЕЙКГГ ЖЩЯАД\n" +
+      "ЫФОЗЭБЛ ЕЮ ИЙЮЭЮДФ\n" +
+      "ВГЕБХАСВГШГ ШДЗЕЖЮХИЮХ ЖЩЯАД\n\n" +
+      "ГШЭБЯШАЧЖШЕДТ\n" +
+      "ЙЬЫЗИДНЮИТ ЖЯМИЮХ БЪУВМХ";
+  }
+}
 </script>
 
 </body>
+
 </html>
