@@ -1,169 +1,134 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>S.C.S. Fragment</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-</head>  
-
+    <meta charset="UTF-8">
+    <title>S.C.S. Fragment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
+    <header>
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <div class="title">S.C.S. FRAGMENT</div>
+    </header>
 
-<header>
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
-  <div class="title">S.C.S. FRAGMENT</div>
-</header>
+    <nav id="menu">
+        <h3>РАЗДЕЛЫ</h3>
+        <button onclick="showSection('about')">Про нас</button>
+        <button onclick="showSection('info')">Информация</button>
+        <button onclick="showSection('archives')">Архивы</button>
+        <button onclick="showSection('ufs')">У.Ф.С.</button>
+        <button onclick="showSection('docs')">Документарий</button>
+        <button onclick="showSection('workspace')">Рабочее пространство</button>
+    </nav>
 
-<nav id="menu">
-  <h3>РАЗДЕЛЫ</h3>
-  <button onclick="showSection('about')">Про нас</button>
-  <button onclick="showSection('info')">Информация</button>
-  <button onclick="showSection('archives')">Архивы</button>
-  <button onclick="showSection('ufs')">У.Ф.С.</button>
-  <button onclick="showSection('docs')">Документарий</button>
-  <button onclick="showSection('workspace')">Рабочее пространство</button>
-</nav>
+    <main>
+        <section id="about" class="section active">
+            <h1>Про нас</h1>
+            <p>
+                S.C.S. Fragment — закрытая коммуникационная структура,  
+                занимающаяся хранением, обработкой и фрагментацией информации.  
+                Мы не предлагаем безопасность.  
+                Мы предлагаем доступ.
+            </p>
+        </section>
 
-<main>
+        <section id="info" class="section">
+            <h1>Информация</h1>
+            <p>
+                Часть материалов может быть повреждена или фрагментирована.  
+                Некоторые данные становятся доступны только после завершения процессов.
+            </p>
+        </section>
 
-<section id="about" class="section active">
-<h1>Про нас</h1>
-<p>
-S.C.S. Fragment — закрытая коммуникационная структура,  
-занимающаяся хранением, обработкой и фрагментацией информации.  
-Мы не предлагаем безопасность.  
-Мы предлагаем доступ.
-</p>
-</section>
+        <section id="archives" class="section">
+            <h1>Архивы</h1>
+            <p>
+                Доступ к архивным фрагментам
+                осуществляется по индивидуальным кодам.
+            </p>
+            <p class="muted-text">
+                Часть архивов зашифрована.<br>
+                Некорректный ввод фиксируется.
+            </p>
+            <hr>
+            <input id="archiveInput" placeholder="Введите код архива">
+            <button class="submit" onclick="activateArchive()">Активировать</button>
+            <div class="status" id="archiveStatus">Ожидание ввода…</div>
+            <pre id="archiveOutput"></pre>
+        </section>
 
-<section id="info" class="section">
-<h1>Информация</h1>
-<p>
-Часть материалов может быть повреждена или фрагментирована.  
-Некоторые данные становятся доступны только после завершения процессов.
-</p>
-</section>
+        <section id="ufs" class="section">
+            <h1>У.Ф.С.</h1>
+            <p><b>Эксперимент С6-2</b></p>
+            <p>У.Ф.С. — Универсальная Фрагментационная Система.</p>
+            <p>
+                Модуль расшифровки предназначен для восстановления
+                исходных структур из фрагментированных данных.
+            </p>
+            <hr>
+            <p><b>Расшифровка фрагмента</b></p>
+            <input id="ufsInput" placeholder="Введите зашифрованную последовательность">
+            <button class="submit" onclick="decodeUFS()">Запустить расшифровку</button>
+            <div class="status" id="ufsStatus">Ожидание данных…</div>
+            <pre id="ufsOutput"></pre>
+            <hr>
+            <p class="muted-text small-text">
+                Некоторые данные могут быть восстановлены частично.<br>
+                Полная интерпретация требует контекста.
+            </p>
+            <hr>
+            <h3>Расширенный доступ УФС</h3>
+            <p class="muted-text">
+                Некоторые функции системы
+                доступны только при наличии
+                внутреннего допуска.
+            </p>
+            <input id="ufsKey" placeholder="Секретный код доступа">
+            <button class="submit" onclick="unlockUFS()">Подтвердить</button>
+            <div id="ufsAccessStatus" class="status"></div>
+            <div id="ufsExtended" style="display:none; margin-top:20px;">
+                <h3>Шифровка</h3>
+                <p class="muted-text">
+                    Ввод расположен в методе расшифровки.
+                </p>
+                <button class="submit" onclick="runUFS()">Зашифровать</button>
+                <pre id="ufsOutput2"></pre>
+            </div>
+        </section>
 
-<section id="archives" class="section">
-<h1>Архивы</h1>
+        <section id="docs" class="section">
+            <h1>Документарий</h1>
+            <p>
+                Некоторые документы требуют подтверждения участия.  
+                Ожидание ответа сервера обязательно.
+            </p>
+            <input placeholder="Идентификатор субъекта">
+            <button class="submit" onclick="fakeRequest()">Отправить запрос</button>
+            <div class="status" id="status">Ожидание...</div>
+        </section>
 
-<p>
-Доступ к архивным фрагментам
-осуществляется по индивидуальным кодам.
-</p>
+        <section id="workspace" class="section">
+            <h1>Личное место работы</h1>
+            <p>
+                Раздел предназначен для проверки
+                внутренних помещений комплекса.
+                <br>
+                Доступ осуществляется исключительно
+                по коду комнаты.
+            </p>
+            <p class="muted-text">
+                Все обращения фиксируются
+                в системе безопасности.
+            </p>
+            <hr>
+            <input id="roomInput" placeholder="Введите код помещения">
+            <button class="submit" onclick="checkRoom()">Проверить</button>
+            <div class="status" id="roomStatus">Ожидание ввода…</div>
+            <pre id="roomOutput"></pre>
+        </section>
+    </main>
 
-<p style="color:#7a7a7a;">
-Часть архивов зашифрована.<br>
-Некорректный ввод фиксируется.
-</p>
-
-<hr>
-
-<input id="archiveInput" placeholder="Введите код архива">
-<button class="submit" onclick="activateArchive()">Активировать</button>
-
-<div class="status" id="archiveStatus">Ожидание ввода…</div>
-
-<pre id="archiveOutput" style="margin-top:15px;color:#8f8f8f;"></pre>
-
-</section>
-
-<section id="ufs" class="section">
-<h1>У.Ф.С.</h1>
-
-<p><b>Эксперимент С6-2</b></p>
-<p>У.Ф.С. — Универсальная Фрагментационная Система.</p>
-
-<p>
-Модуль расшифровки предназначен для восстановления
-исходных структур из фрагментированных данных.
-</p>
-
-<hr>
-
-<p><b>Расшифровка фрагмента</b></p>
-
-<input id="ufsInput" placeholder="Введите зашифрованную последовательность">
-<button class="submit" onclick="decodeUFS()">Запустить расшифровку</button>
-
-<div class="status" id="ufsStatus">Ожидание данных…</div>
-
-<pre id="ufsOutput" style="margin-top:15px;color:#8f8f8f;"></pre>
-
-<hr>
-
-<p style="color:#7a7a7a;font-size:12px;">
-Некоторые данные могут быть восстановлены частично.<br>
-Полная интерпретация требует контекста.
-</p>
-  <hr>
-
-<h3>Расширенный доступ УФС</h3>
-
-<p style="color:#7a7a7a;">
-  Некоторые функции системы
-  доступны только при наличии
-  внутреннего допуска.
-</p>
-
-<input id="ufsKey" placeholder="Секретный код доступа">
-<button class="submit" onclick="unlockUFS()">Подтвердить</button>
-
-<div id="ufsAccessStatus" class="status"></div>
-
-<div id="ufsExtended" style="display:none; margin-top:20px;">
-
-  <h3>Шифровка</h3>
-<p style="color:#7a7a7a;">
-  Ввод расположен в методе расшифровки.
-</p>
-  <button class="submit" onclick="runUFS()">Зашифровать</button>
-
-  <pre id="ufsOutput"></pre>
-
-</div>
-</section>
-
-
-<section id="docs" class="section">
-<h1>Документарий</h1>
-<p>
-Некоторые документы требуют подтверждения участия.  
-Ожидание ответа сервера обязательно.
-</p>
-
-<input placeholder="Идентификатор субъекта">
-<button class="submit" onclick="fakeRequest()">Отправить запрос</button>
-<div class="status" id="status">Ожидание...</div>
-</section>
-<section id="workspace" class="section">
-  <h1>Личное место работы</h1>
-
-  <p>
-    Раздел предназначен для проверки
-    внутренних помещений комплекса.
-    <br>
-    Доступ осуществляется исключительно
-    по коду комнаты.
-  </p>
-
-  <p style="color:#7a7a7a;">
-    Все обращения фиксируются
-    в системе безопасности.
-  </p>
-
-  <hr>
-
-  <input id="roomInput" placeholder="Введите код помещения">
-  <button class="submit" onclick="checkRoom()">Проверить</button>
-
-  <div class="status" id="roomStatus">Ожидание ввода…</div>
-
-  <pre id="roomOutput" style="margin-top:15px;color:#8f8f8f;"></pre>
-</section>
-
-</main>
+    <script src="script.js"></script>
 </body>
-
 </html>
-
